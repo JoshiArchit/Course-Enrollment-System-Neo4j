@@ -43,9 +43,10 @@ public class SecurityConfig {
                 .csrf( AbstractHttpConfigurer::disable)
                 .cors( Customizer.withDefaults() )
                 .authorizeHttpRequests(auth -> auth
-                        // Protect the /api/v1/auth/me endpoint
+                        // Endpoints that require authentication
                         .requestMatchers(
-                                "api/v1/auth/me"
+                                "api/v1/auth/me",
+                                "api/v1/enrolments/**"
                         ).authenticated()
                         // Permit all other requests
                         .anyRequest().permitAll()

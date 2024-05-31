@@ -1,11 +1,18 @@
 package io.github.architjoshi2904.springbootneo4j.controllers;
 
 import io.github.architjoshi2904.springbootneo4j.objects.CourseEnrollmentDTO;
+import io.github.architjoshi2904.springbootneo4j.queryresults.CourseEnrollmentQueryResult;
+import io.github.architjoshi2904.springbootneo4j.requests.CourseEnrollmentRequest;
 import io.github.architjoshi2904.springbootneo4j.services.CourseEnrollmentService;
 import io.github.architjoshi2904.springbootneo4j.services.LessonService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 /**
   * CourseEnrollmentController.java
@@ -15,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
   */
 
 @RestController
-@RequestMapping("api/v1/enrolments")
+@RequestMapping("/api/v1/enrollments")
 public class CourseEnrollmentController {
     private final CourseEnrollmentService courseEnrollmentService;
     private final LessonService lessonService;
@@ -27,5 +34,13 @@ public class CourseEnrollmentController {
 
     // Endpoints
     // 1. Allow user to enroll in course
-    public ResponseEntity< CourseEnrollmentDTO >
+    @PostMapping("/")
+    public ResponseEntity< CourseEnrollmentDTO > enrollIn( @RequestBody CourseEnrollmentRequest request, Principal principal ) {
+        CourseEnrollmentQueryResult enrollmentQueryResult = courseEnrollmentService.enrollIn( principal.getName(), request.getIdentifier() );
+        CourseEnrollmentDTO responseEnrollment = new CourseEnrollmentDTO(
+                enrollmentQueryResult.getUser().getUsername(),
+                enrollmentQueryResult.getUser().getName(),
+                enrollmentQueryResult.getCourse());
+        return new ResponseEntity<>( responseEnrollment, HttpStatus.OK );
+    }
 }

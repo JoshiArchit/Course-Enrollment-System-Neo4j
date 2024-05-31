@@ -43,6 +43,7 @@ public class CourseEnrollmentController {
                 (course) -> {
                     CourseDTO responseCourse = new CourseDTO( course.getIdentifier(), course.getTitle(), course.getTeacher() );
                     responseCourse.setLessons( lessonService.getAllLessonsByCourseIdentifier( course.getIdentifier() ) );
+                    responseCourse.setEnrolled( true );
                     return responseCourse;
                 }
         ).collect( Collectors.toList());
@@ -54,7 +55,7 @@ public class CourseEnrollmentController {
     // 1. Allow user to enroll in course
     @PostMapping("/")
     public ResponseEntity< CourseEnrollmentDTO > enrollIn( @RequestBody CourseEnrollmentRequest request, Principal principal ) {
-        CourseEnrollmentQueryResult enrollmentQueryResult = courseEnrollmentService.enrollIn( principal.getName(), request.getIdentifier() );
+        CourseEnrollmentQueryResult enrollmentQueryResult = courseEnrollmentService.enrollIn( principal.getName(), request.getCourseIdentifier() );
         CourseEnrollmentDTO responseEnrollment = new CourseEnrollmentDTO(
                 enrollmentQueryResult.getUser().getUsername(),
                 enrollmentQueryResult.getUser().getName(),

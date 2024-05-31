@@ -7,16 +7,16 @@ package io.github.architjoshi2904.springbootneo4j.requests;
   */
  
 public class CourseEnrollmentRequest {
-    private String identifier;
+    private String courseIdentifier;
 
-    public CourseEnrollmentRequest( String identifier ) {
+    public CourseEnrollmentRequest( String courseIdentifier ) {
     }
 
-    public String getIdentifier() {
-        return identifier;
+    public String getCourseIdentifier() {
+        return courseIdentifier;
     }
 
-    public void setIdentifier( String identifier ) {
-        this.identifier = identifier;
+    public void setCourseIdentifier( String courseIdentifier ) {
+        this.courseIdentifier = courseIdentifier;
     }
 }

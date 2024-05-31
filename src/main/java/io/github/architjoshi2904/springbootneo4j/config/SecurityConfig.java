@@ -45,8 +45,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Endpoints that require authentication
                         .requestMatchers(
-                                "api/v1/auth/me",
-                                "api/v1/enrolments/**"
+                                "/api/v1/auth/me",
+                                "/api/v1/enrollments/**"
                         ).authenticated()
                         // Permit all other requests
                         .anyRequest().permitAll()

@@ -1,5 +1,7 @@
 package io.github.architjoshi2904.springbootneo4j.controllers;
 
+import io.github.architjoshi2904.springbootneo4j.models.Course;
+import io.github.architjoshi2904.springbootneo4j.objects.CourseDTO;
 import io.github.architjoshi2904.springbootneo4j.objects.CourseEnrollmentDTO;
 import io.github.architjoshi2904.springbootneo4j.queryresults.CourseEnrollmentQueryResult;
 import io.github.architjoshi2904.springbootneo4j.requests.CourseEnrollmentRequest;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
   * CourseEnrollmentController.java
@@ -30,6 +34,20 @@ public class CourseEnrollmentController {
     public CourseEnrollmentController( CourseEnrollmentService courseEnrollmentService, LessonService lessonService ) {
         this.courseEnrollmentService = courseEnrollmentService;
         this.lessonService = lessonService;
+    }
+
+    public ResponseEntity< List< CourseDTO > > enrollments(Principal principal){
+        List< Course > courses = courseEnrollmentService.getAllEnrollmentCoursesByUsername( principal.getName() );
+
+        List<CourseDTO> responseCourses = courses.stream().map(
+                (course) -> {
+                    CourseDTO responseCourse = new CourseDTO( course.getIdentifier(), course.getTitle(), course.getTeacher() );
+                    responseCourse.setLessons( lessonService.getAllLessonsByCourseIdentifier( course.getIdentifier() ) );
+                    return responseCourse;
+                }
+        ).collect( Collectors.toList());
+
+        return new ResponseEntity<>( responseCourses, HttpStatus.OK );
     }
 
     // Endpoints

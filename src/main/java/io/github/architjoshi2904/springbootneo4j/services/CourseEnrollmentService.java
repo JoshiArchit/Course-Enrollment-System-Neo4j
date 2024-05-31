@@ -32,6 +32,7 @@ public class CourseEnrollmentService {
 
     // Create relationship
     public CourseEnrollmentQueryResult enrollIn(String username, String identifier) {
+        // TODO : Check if use is already enrolled in the course
         return userRepository.createEnrollmentRelationship( username, identifier );
     }
 
